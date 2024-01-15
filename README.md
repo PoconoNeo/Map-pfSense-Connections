@@ -1,7 +1,9 @@
-# Map-pfSense-Connections
-# Created on 1/15/2023
-# Created by PoconoNeo v1.0
-# PfSense Connection Report Viewer
+## README.md
+	Map-pfSense-Connections
+	Created on 1/15/2023
+	Created by PoconoNeo v1.0
+
+PfSense Connection Report Viewer
   This project is designed to generate a report from PfSense firewall logs and display the active connections on a map using a Flask web server.
   
 ## Overview
