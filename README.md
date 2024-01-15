@@ -57,5 +57,5 @@ License
 Acknowledgments
 	Thanks to the contributors of the Flask and Leaflet.js projects.
 	This project uses the ip-api service for geolocation data.
-
+	ip-api.com for performing the geotag info
 For more information on how to use or contribute to this project, please refer to the project documentation or contact the maintainers.
