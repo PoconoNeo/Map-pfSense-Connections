@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Active Connections Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <style>
+        /* ... existing styles ... */
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script>
+        var map = L.map('map').setView([0, 0], 2);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+maxZoom: 19,
+attribution: '© OpenStreetMap contributors'
+}).addTo(map);
+    // Define the static source IP geolocation
+    var homeGeo = { lat: YOUR_LATITUDE, lon: YOUR_LONGITUDE };
+    var homePopupContent = "Home ISP IP Location";
+    L.marker([homeGeo.lat, homeGeo.lon]).addTo(map)
+        .bindPopup(homePopupContent);
+
+    // Fetch data from the Flask server
+    fetch('/data')
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(connections) {
+            connections.forEach(function(connection) {
+                if (connection.dst_ip_geotag) {
+                    var geotag = connection.dst_ip_geotag;
+                    var popupContent = `
+                        <b>IP:</b> ${connection.dst_ip}<br>
+                        <b>Protocol:</b> ${connection.protocol}<br>
+                        <b>Source IP Translated:</b> ${connection.src_ip_translated}<br>
+                        <b>Source Port Translated:</b> ${connection.src_port_translated}<br>
+                        <b>Source IP Original:</b> ${connection.src_ip_original}<br>
+                        <b>Source Port Original:</b> ${connection.src_port_original}<br>
+                        <b>Destination IP:</b> ${connection.dst_ip}<br>
+                        <b>Destination Port:</b> ${connection.dst_port}<br>
+                        <b>State:</b> ${connection.state.trim()}<br>
+                        <b>Country:</b> ${geotag.country}<br>
+                        <b>Region:</b> ${geotag.regionName} (${geotag.region})<br>
+                        <b>City:</b> ${geotag.city}<br>
+                        <b>ZIP Code:</b> ${geotag.zip}<br>
+                        <b>Latitude:</b> ${geotag.lat}<br>
+                        <b>Longitude:</b> ${geotag.lon}<br>
+                        <b>Timezone:</b> ${geotag.timezone}<br>
+                        <b>ISP:</b> ${geotag.isp}<br>
+                        <b>Organization:</b> ${geotag.org}<br>
+<b>AS:</b> ${geotag.as}<br>
+<b>Query IP:</b> ${geotag.query}<br>
+`;
+                    // Add a marker to the map for each connection
+                    var marker = L.marker([
+
